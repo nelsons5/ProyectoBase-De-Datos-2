@@ -15,9 +15,7 @@ public class main {
 
     static ResultSet rs=null;
 
-    /*Asignar datos de conexion*/
 
-    static String bd="XE";//TIPO DE BASE DE DATOS
 
 
  /*Metodo de conexion a la base de datos*/

@@ -6,7 +6,6 @@
 package proyectobasededatos2_nelson;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
@@ -33,7 +32,7 @@ public class crearCuenta extends javax.swing.JFrame {
     public crearCuenta() {
         initComponents();
     }
-    //String comboBox = jComboBox.getSelectedItem().toString();
+   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -164,7 +163,7 @@ public class crearCuenta extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String comboBox = jComboBox1.getSelectedItem().toString();
+      String comboBox = jComboBox1.getSelectedItem().toString();
       String tipo_usuario="";
       switch (comboBox){
           case "BANRURAL":

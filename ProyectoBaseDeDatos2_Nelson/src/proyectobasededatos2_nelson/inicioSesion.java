@@ -5,16 +5,6 @@
  */
 package proyectobasededatos2_nelson;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import javax.swing.JOptionPane;
-
-/**
- *
- * @author User
- */
 public class inicioSesion extends javax.swing.JFrame {
 
     /**
@@ -24,29 +14,12 @@ public class inicioSesion extends javax.swing.JFrame {
         initComponents();
         
     }
-    static Connection cn;
-    static Statement s;
-    static ResultSet rs;
-    String usuario;
+   
     Menu menu = new Menu();
-    crearCheque crearCheque = new crearCheque();
-    crearCuenta crearCuenta = new crearCuenta();
-    crearUsuario crearUsuario = new crearUsuario();
-    imprimirCheque imprimirCheque = new imprimirCheque();
     inicioSesion inicioSesion = new inicioSesion();
-        public void conectar(){
-            try{
-            String url = "jdbc:oracle:thin:@localhost:1521:XE";
-            cn = DriverManager.getConnection(url, "NUEVA_VERAPAZ","nuevaverapaz");
-            s = cn.createStatement(); 
-            System.out.println("Se ha establecido la conexion con el esquema NUEVA_VERAPAZ");
-            }
-            catch(Exception e)
-            {
-               JOptionPane.showMessageDialog(null,"error: "+e);
-            }
+        
     
-}   
+
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -93,7 +66,7 @@ public class inicioSesion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        conectar();
+        
         String user = jCodigo.getText();
         String password = jPassword.getText();
         

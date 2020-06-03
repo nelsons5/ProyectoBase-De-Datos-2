@@ -11,28 +11,23 @@ import java.sql.Statement;
 import javax.swing.JOptionPane;
 import java.sql.*;
 
+
 /**
  *
  * @author Nelson
  */
-public class crearCuenta extends javax.swing.JFrame {
-
+public class crearCuenta extends javax.swing.JFrame { 
+    
+    public crearCuenta() {
+        initComponents();
+    }
     static Connection conn=null;
 
     static Statement s=null;
 
     static ResultSet rs=null;
     Menu menu = new Menu();
-    crearCheque crearCheque = new crearCheque();
-    crearCuenta crearCuenta = new crearCuenta();
-    crearUsuario crearUsuario = new crearUsuario();
-    imprimirCheque imprimirCheque = new imprimirCheque();
-    inicioSesion inicioSesion = new inicioSesion();
     
-    public crearCuenta() {
-        initComponents();
-    }
-   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -145,8 +140,8 @@ public class crearCuenta extends javax.swing.JFrame {
 
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("CODIGO USUARIO QUE INGRESA:");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 270, -1, -1));
-        jPanel1.add(jCodUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 290, 310, -1));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 270, 210, 20));
+        jPanel1.add(jCodUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 290, 210, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -164,37 +159,37 @@ public class crearCuenta extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
       String comboBox = jComboBox1.getSelectedItem().toString();
-      String tipo_usuario="";
+      String tipo_banco="";
       switch (comboBox){
           case "BANRURAL":
-              tipo_usuario= "1";
+              tipo_banco= "1001";
           break;
           case "BANTRAB":
-              tipo_usuario= "2";
+              tipo_banco= "1002";
           break;
           case "BANCO INDUSTRIAL":
-              tipo_usuario= "3";
+              tipo_banco= "1003";
           break;
           case "GT CONTINENTAL":
-              tipo_usuario= "4";
+              tipo_banco= "1004";
           break;
           case "BANCO AZTECA":
-              tipo_usuario= "4";
+              tipo_banco= "1005";
           break;
-              
+                      
       }
                 try {
 
                 conn=main.Enlace(conn);//INVOCANDO LA CONEXION DESDE LA CLASE main
 
-                 String sql="{call INSERT_CUENTA(?,?,?,?,?,?,?,?)}";//QUERY
+                 String sql="{call INSERT_CUENTA(?,?,?,?,?,?,?)}";//QUERY
 
                  PreparedStatement pst=conn.prepareStatement(sql);//EJECUCION DE QUERY POR MEDIO DE STATEMENT
 
                  //ASIGANAR DE VARIABLES A LOS PARAMETROS DE QUERY
 
                  pst.setString(1, jId.getText());
-                 pst.setString(2, tipo_usuario);
+                 pst.setString(2, tipo_banco);
                  pst.setString(3, jNombreCuenta.getText());
                  pst.setInt(4, Integer.parseInt(jMonto.getText()));
                  pst.setInt(5, Integer.parseInt(jMin.getText()));
@@ -206,37 +201,38 @@ public class crearCuenta extends javax.swing.JFrame {
 
                  pst.close();//CERRAR CONEXION
 
-
                  JOptionPane.showMessageDialog(null, "Guardado exitoso");//MENSAJE
-                 limpiarVariables();
+                 dispose();
                  menu.setVisible(true);
-                 crearUsuario.setVisible(true);
+                 
                  
 
         }catch (Exception e){
 
-            System.out.println(e.getCause());//OBTENER ERROR
+            JOptionPane.showMessageDialog(null, "Error al insertar datos");//MENSAJE
 
         }
+                
+            
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jBtnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnCerrarSesionActionPerformed
-            inicioSesion.setVisible(true);
-            crearCuenta.setVisible(false);
+        inicioSesion inicioSesion = new inicioSesion();    
+        inicioSesion.setVisible(true);
+        dispose();   
     }//GEN-LAST:event_jBtnCerrarSesionActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
             menu.setVisible(true);
-            crearCuenta.setVisible(false);
+            dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     public void limpiarVariables(){
-        jId=null;
-        jNombreCuenta=null;
-        jComboBox1=null;
-        jMonto=null;
-        jMin=null;
-        jCodUsuario=null;        
+        jId.setText(null);
+        jNombreCuenta.setText(null);
+        jMonto.setText(null);
+        jMin.setText(null);
+        jCodUsuario.setText(null);      
     }
     
     

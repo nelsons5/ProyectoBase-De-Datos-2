@@ -5,21 +5,32 @@
  */
 package proyectobasededatos2_nelson;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 public class inicioSesion extends javax.swing.JFrame {
 
     /**
      * Creates new form inicioSesion
      */
     public inicioSesion() {
-        initComponents();
-        
+        initComponents();  
     }
    
-    Menu menu = new Menu();
-    inicioSesion inicioSesion = new inicioSesion();
-        
     
+    
+    static Connection conn=null;
 
+    static Statement s=null;
+
+    static ResultSet rs=null;
+
+    public static DefaultTableModel modelo = new DefaultTableModel();
+    Menu menu = new Menu();
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -67,15 +78,52 @@ public class inicioSesion extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
-        String user = jCodigo.getText();
+        String cod_usuario = jCodigo.getText();
         String password = jPassword.getText();
-        
-        menu.setVisible(true);
-        inicioSesion.setVisible(false);
-        
-        
+        //DefaultTableModel usuario = obtenerUsuario(cod_usuario,password);
+        obtenerUsuario(cod_usuario,password);
+        if(modelo.getRowCount() ==0){
+            JOptionPane.showMessageDialog(null, "USUARIO NO ENCONTRADO");        
+        }   else{      
+                 dispose();
+                 menu.setVisible(true);
+        } 
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void obtenerUsuario(String codigo, String password){
+        try {
+            //Para conectarnos a nuestra base de datos
+            conn=main.Enlace(conn);//INVOCANDO LA CONEXION DESDE LA CLASE main
+            //Para ejecutar la consulta
+            s = conn.createStatement();
+            //Ejecutamos la consulta y los datos lo almacenamos en un ResultSet
+             rs = s.executeQuery("select cod_usuario, password, cod_tipo_usuario, nombre from USUARIO where cod_usuario ='"+ codigo+ "' and password ='" +password+"'");
+            //Obteniendo la informacion de las columnas que estan siendo consultadas
+            ResultSetMetaData rsMd = rs.getMetaData();
+            //La cantidad de columnas que tiene la consulta
+            int cantidadColumnas = rsMd.getColumnCount();           
+            //Establecer como cabezeras el nombre de las columnas
+            for (int i = 1; i <= cantidadColumnas; i++) {
+             modelo.addColumn(rsMd.getColumnLabel(i));
+            }
+            //Creando las filas para el JTable
+            while (rs.next()) {
+             Object[] fila = new Object[cantidadColumnas];
+             for (int i = 0; i < cantidadColumnas; i++) {
+               fila[i]=rs.getObject(i+1);
+             }
+             modelo.addRow(fila);
+            }
+            
+            rs.close();
+            conn.close();
+            
+       } catch (Exception ex) {
+        ex.printStackTrace();
+       }
+    }
+    
+    
     /**
      * @param args the command line arguments
      */

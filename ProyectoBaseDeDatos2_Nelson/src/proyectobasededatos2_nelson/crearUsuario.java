@@ -6,7 +6,6 @@
 package proyectobasededatos2_nelson;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
@@ -25,6 +24,7 @@ public class crearUsuario extends javax.swing.JFrame {
      */
     public crearUsuario() {
         initComponents();
+       // jNombreUsuario.setText(inicioSesion.cod_usuario);
     }
     //String comboBox = jComboBox.getSelectedItem().toString();
     static Connection conn=null;
@@ -33,11 +33,7 @@ public class crearUsuario extends javax.swing.JFrame {
 
     static ResultSet rs=null;
     Menu menu = new Menu();
-    crearCheque crearCheque = new crearCheque();
-    crearCuenta crearCuenta = new crearCuenta();
-    crearUsuario crearUsuario = new crearUsuario();
-    imprimirCheque imprimirCheque = new imprimirCheque();
-    inicioSesion inicioSesion = new inicioSesion();
+    
   
 
 
@@ -213,23 +209,26 @@ public class crearUsuario extends javax.swing.JFrame {
 
 
                  JOptionPane.showMessageDialog(null, "Guardado exitoso");//MENSAJE
+                 dispose();
+                 menu.setVisible(true);
 
         }catch (Exception e){
 
-            System.out.println(e.getCause());//OBTENER ERROR
+            JOptionPane.showMessageDialog(null,"Error al guardar datos: " + e.getCause());//OBTENER ERROR
 
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jBtnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnCerrarSesionActionPerformed
+        inicioSesion inicioSesion = new inicioSesion();
         inicioSesion.setVisible(true);
-        crearUsuario.setVisible(false);
+        dispose();
         
     }//GEN-LAST:event_jBtnCerrarSesionActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         menu.setVisible(true);
-        crearUsuario.setVisible(false);
+        dispose();  
     }//GEN-LAST:event_jButton2ActionPerformed
 
 

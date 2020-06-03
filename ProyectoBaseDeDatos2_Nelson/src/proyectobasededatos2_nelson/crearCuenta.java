@@ -5,15 +5,31 @@
  */
 package proyectobasededatos2_nelson;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import java.sql.*;
+
 /**
  *
  * @author Nelson
  */
 public class crearCuenta extends javax.swing.JFrame {
 
-    /**
-     * Creates new form crearUsuario
-     */
+    static Connection conn=null;
+
+    static Statement s=null;
+
+    static ResultSet rs=null;
+    Menu menu = new Menu();
+    crearCheque crearCheque = new crearCheque();
+    crearCuenta crearCuenta = new crearCuenta();
+    crearUsuario crearUsuario = new crearUsuario();
+    imprimirCheque imprimirCheque = new imprimirCheque();
+    inicioSesion inicioSesion = new inicioSesion();
+    
     public crearCuenta() {
         initComponents();
     }
@@ -31,25 +47,25 @@ public class crearCuenta extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        jId = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jBtnCerrarSesion = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        jNombreCuenta = new javax.swing.JTextField();
         jNombreUsuario = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        jMonto = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        jMin = new javax.swing.JTextField();
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
+        jMax = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jCodUsuario = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -57,12 +73,17 @@ public class crearCuenta extends javax.swing.JFrame {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jButton1.setText("GUARDAR CUENTA");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 350, 205, -1));
 
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("ID_CUENTA:");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, -1, -1));
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 220, 200, -1));
+        jPanel1.add(jId, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 220, 200, -1));
 
         jLabel2.setFont(new java.awt.Font("Impact", 0, 50)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -74,30 +95,30 @@ public class crearCuenta extends javax.swing.JFrame {
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 15, 230, 136));
 
         jBtnCerrarSesion.setText("CERRAR SESIÓN");
+        jBtnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnCerrarSesionActionPerformed(evt);
+            }
+        });
         jPanel1.add(jBtnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 10, -1, -1));
 
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("NOMBRE CUENTA:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 220, 110, -1));
-        jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 220, 210, -1));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 180, 110, -1));
+        jPanel1.add(jNombreCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 180, 210, -1));
 
         jNombreUsuario.setForeground(new java.awt.Color(255, 255, 255));
         jPanel1.add(jNombreUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 10, 278, 19));
 
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("MONTO:");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, 70, -1));
-        jPanel1.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 260, 200, -1));
-
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("USUARIO GENERA:");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 260, -1, -1));
-        jPanel1.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 260, 210, -1));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 220, 70, -1));
+        jPanel1.add(jMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 220, 210, -1));
 
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("RANGO DE CHEQUES");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 300, -1, -1));
-        jPanel1.add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 330, 200, -1));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 260, -1, -1));
+        jPanel1.add(jMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 290, 200, -1));
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BANRURAL", "BANTRAB", "BANCO INDUSTRIAL", "GT CONTINENTAL", "BANCO AZTECA" }));
         jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 180, 200, -1));
@@ -107,16 +128,26 @@ public class crearCuenta extends javax.swing.JFrame {
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, 70, 20));
 
         jButton2.setText("VOLVER MENU");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 50, 120, -1));
 
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("MIN:");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, -1, -1));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, -1, -1));
 
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setText("MAX:");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 370, -1, -1));
-        jPanel1.add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 370, 200, -1));
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, -1, -1));
+        jPanel1.add(jMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 330, 200, -1));
+
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("CODIGO USUARIO QUE INGRESA:");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 270, -1, -1));
+        jPanel1.add(jCodUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 290, 310, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -132,6 +163,84 @@ public class crearCuenta extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String comboBox = jComboBox1.getSelectedItem().toString();
+      String tipo_usuario="";
+      switch (comboBox){
+          case "BANRURAL":
+              tipo_usuario= "1";
+          break;
+          case "BANTRAB":
+              tipo_usuario= "2";
+          break;
+          case "BANCO INDUSTRIAL":
+              tipo_usuario= "3";
+          break;
+          case "GT CONTINENTAL":
+              tipo_usuario= "4";
+          break;
+          case "BANCO AZTECA":
+              tipo_usuario= "4";
+          break;
+              
+      }
+                try {
+
+                conn=main.Enlace(conn);//INVOCANDO LA CONEXION DESDE LA CLASE main
+
+                 String sql="{call INSERT_CUENTA(?,?,?,?,?,?,?,?)}";//QUERY
+
+                 PreparedStatement pst=conn.prepareStatement(sql);//EJECUCION DE QUERY POR MEDIO DE STATEMENT
+
+                 //ASIGANAR DE VARIABLES A LOS PARAMETROS DE QUERY
+
+                 pst.setString(1, jId.getText());
+                 pst.setString(2, tipo_usuario);
+                 pst.setString(3, jNombreCuenta.getText());
+                 pst.setInt(4, Integer.parseInt(jMonto.getText()));
+                 pst.setInt(5, Integer.parseInt(jMin.getText()));
+                 pst.setInt(6, Integer.parseInt(jMax.getText()));
+                 pst.setString(7, jCodUsuario.getText());
+                                 
+                 
+                 pst.execute();//EJECUTAR
+
+                 pst.close();//CERRAR CONEXION
+
+
+                 JOptionPane.showMessageDialog(null, "Guardado exitoso");//MENSAJE
+                 limpiarVariables();
+                 menu.setVisible(true);
+                 crearUsuario.setVisible(true);
+                 
+
+        }catch (Exception e){
+
+            System.out.println(e.getCause());//OBTENER ERROR
+
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jBtnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnCerrarSesionActionPerformed
+            inicioSesion.setVisible(true);
+            crearCuenta.setVisible(false);
+    }//GEN-LAST:event_jBtnCerrarSesionActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+            menu.setVisible(true);
+            crearCuenta.setVisible(false);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    public void limpiarVariables(){
+        jId=null;
+        jNombreCuenta=null;
+        jComboBox1=null;
+        jMonto=null;
+        jMin=null;
+        jCodUsuario=null;        
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -172,7 +281,9 @@ public class crearCuenta extends javax.swing.JFrame {
     private javax.swing.JButton jBtnCerrarSesion;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JTextField jCodUsuario;
     private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JTextField jId;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -183,13 +294,11 @@ public class crearCuenta extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JTextField jMax;
+    private javax.swing.JTextField jMin;
+    private javax.swing.JTextField jMonto;
+    private javax.swing.JTextField jNombreCuenta;
     private javax.swing.JLabel jNombreUsuario;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
     // End of variables declaration//GEN-END:variables
 }

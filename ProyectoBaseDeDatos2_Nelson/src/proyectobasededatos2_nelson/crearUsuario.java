@@ -10,6 +10,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
+import java.sql.*;
+
+        
 
 /**
  *
@@ -24,19 +27,19 @@ public class crearUsuario extends javax.swing.JFrame {
         initComponents();
     }
     //String comboBox = jComboBox.getSelectedItem().toString();
+    static Connection conn=null;
 
-    static Connection cn;
- static Statement s;
- static ResultSet rs;
- int cantidadColumnas;
- int cantidadFilas;
- 
-    //Variables
-int contadorDeRegistros=0;
-int ubicacionDeRegistro=0;
-int buscador=0;
-boolean enter=false;
-boolean DPIencontrado=false;
+    static Statement s=null;
+
+    static ResultSet rs=null;
+    Menu menu = new Menu();
+    crearCheque crearCheque = new crearCheque();
+    crearCuenta crearCuenta = new crearCuenta();
+    crearUsuario crearUsuario = new crearUsuario();
+    imprimirCheque imprimirCheque = new imprimirCheque();
+    inicioSesion inicioSesion = new inicioSesion();
+  
+
 
 
     @SuppressWarnings("unchecked")
@@ -64,6 +67,8 @@ boolean DPIencontrado=false;
         jButton2 = new javax.swing.JButton();
         jCodUsuario = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jPassword = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -71,7 +76,12 @@ boolean DPIencontrado=false;
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jButton1.setText("GUARDAR USUARIO");
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 310, 205, -1));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 310, 205, -1));
 
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("NOMBRE:");
@@ -85,9 +95,14 @@ boolean DPIencontrado=false;
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/descarga.png"))); // NOI18N
         jLabel3.setText("jLabel2");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 15, 230, 136));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 230, 136));
 
         jBtnCerrarSesion.setText("CERRAR SESIÓN");
+        jBtnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnCerrarSesionActionPerformed(evt);
+            }
+        });
         jPanel1.add(jBtnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 10, -1, -1));
 
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -121,12 +136,24 @@ boolean DPIencontrado=false;
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 260, 140, 20));
 
         jButton2.setText("VOLVER MENU");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 50, 120, -1));
         jPanel1.add(jCodUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(449, 140, 220, -1));
 
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("CÓDIGO USUARIO:");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 140, 110, -1));
+
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setText("PASSWORD:");
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 70, -1));
+
+        jPassword.setText("jPasswordField1");
+        jPanel1.add(jPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 300, 210, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -142,42 +169,72 @@ boolean DPIencontrado=false;
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public void conectar()
-{
-    try{
-    String url = "jdbc:oracle:thin:@localhost:1521:XE";
-    cn = DriverManager.getConnection(url, "REGISTRO","12345");
-    s = cn.createStatement(); 
-    }
-    catch(Exception e)
-    {
-       JOptionPane.showMessageDialog(null,"error: "+e);
-    }
-    
-}
-    public void ingresoEnTabla() 
-{
-    try
-    {
-      conectar();
-        String result="insert into USUARIO values('"+dpi[contadorDeRegistros]+"','"
-                    +nombre[contadorDeRegistros]
-                    +"','"+direccion[contadorDeRegistros]+"','"+telefono[contadorDeRegistros]+"','"
-                    +f_Nac[contadorDeRegistros]+"',"+
-                (   contadorDeRegistros+1)+")";
-          s.execute(result); 
-            
-    
-       s.close();
-    
-            cn.close();
-    }
-    catch(Exception ex)
-    {
-       
-        JOptionPane.showMessageDialog(null,"Error ingresando datos: "+ex);
-    }
-}
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+      String comboBox = jComboBox1.getSelectedItem().toString();
+      String tipo_usuario="";
+      switch (comboBox){
+          case "ADMIN":
+              tipo_usuario= "1";
+          break;
+          case "GENERADOR":
+              tipo_usuario= "2";
+          break;
+          case "AUDITORIA":
+              tipo_usuario= "3";
+          break;
+          case "GERENCIA":
+              tipo_usuario= "4";
+          break;
+              
+      }
+                try {
+
+                conn=main.Enlace(conn);//INVOCANDO LA CONEXION DESDE LA CLASE main
+
+                 String sql="{call INSERT_USUARIO(?,?,?,?,?,?,?,?)}";//QUERY
+
+                 PreparedStatement pst=conn.prepareStatement(sql);//EJECUCION DE QUERY POR MEDIO DE STATEMENT
+
+                 //ASIGANAR DE VARIABLES A LOS PARAMETROS DE QUERY
+
+                 pst.setString(1, jCodUsuario.getText());
+                 pst.setString(2, jNombre.getText());
+                 pst.setString(3, jApellido.getText());
+                 pst.setString(4, jCui.getText());
+                 pst.setInt(5, Integer.parseInt(jTelefono.getText()));
+                 pst.setString(6, jCorreo.getText());
+                 pst.setString(7, tipo_usuario);
+                 pst.setString(8, jPassword.getText());
+                 
+                 
+                 pst.execute();//EJECUTAR
+
+                 pst.close();//CERRAR CONEXION
+
+
+                 JOptionPane.showMessageDialog(null, "Guardado exitoso");//MENSAJE
+
+        }catch (Exception e){
+
+            System.out.println(e.getCause());//OBTENER ERROR
+
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jBtnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnCerrarSesionActionPerformed
+        inicioSesion.setVisible(true);
+        crearUsuario.setVisible(false);
+        
+    }//GEN-LAST:event_jBtnCerrarSesionActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        menu.setVisible(true);
+        crearUsuario.setVisible(false);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+
+
+   
     
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -221,6 +278,7 @@ boolean DPIencontrado=false;
     private javax.swing.JTextField jCorreo;
     private javax.swing.JTextField jCui;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -232,6 +290,7 @@ boolean DPIencontrado=false;
     private javax.swing.JTextField jNombre;
     private javax.swing.JLabel jNombreUsuario;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPasswordField jPassword;
     private javax.swing.JTextField jTelefono;
     // End of variables declaration//GEN-END:variables
 }

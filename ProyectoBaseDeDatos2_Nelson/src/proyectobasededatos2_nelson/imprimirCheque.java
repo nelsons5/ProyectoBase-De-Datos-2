@@ -8,7 +8,11 @@ package proyectobasededatos2_nelson;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -71,6 +75,11 @@ public class imprimirCheque extends javax.swing.JFrame {
 
         jButton1.setText("IMPRIMIR CHEQUE");
         jButton1.setEnabled(false);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 500, 205, -1));
 
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -251,7 +260,7 @@ public class imprimirCheque extends javax.swing.JFrame {
             //Para ejecutar la consulta
             s = conn.createStatement();
             //Ejecutamos la consulta y los datos lo almacenamos en un ResultSet
-             rs = s.executeQuery("select * from CUENTA where id_cuenta='"+ numCheque+ "'");
+             rs = s.executeQuery("select * from CHEQUE where num_cheque='"+ numCheque+ "'");
             //Obteniendo la informacion de las columnas que estan siendo consultadas
             ResultSetMetaData rsMd = rs.getMetaData();
             //La cantidad de columnas que tiene la consulta
@@ -281,8 +290,8 @@ public class imprimirCheque extends javax.swing.JFrame {
         jIdCuenta.setText(cheque.getValueAt(0,0).toString());
         jBanco.setText(cheque.getValueAt(0,1).toString());
         jNombreCuenta.setText(cheque.getValueAt(0,2).toString());
-        jBeneficiario.setText(cheque.getValueAt(0,3).toString());
-        jFecha.setText(cheque.getValueAt(0,4).toString());
+        jFecha.setText(cheque.getValueAt(0,3).toString());
+        jBeneficiario.setText(cheque.getValueAt(0,4).toString());
         jMontoDepositar.setText(cheque.getValueAt(0,5).toString());
         jEstado.setText(cheque.getValueAt(0,6).toString());
     }
@@ -298,8 +307,19 @@ public class imprimirCheque extends javax.swing.JFrame {
     mostrarDatos();    
     if(jEstado.getText().equals("1") || jEstado.getText().equals("5")){
         jButton1.setEnabled(true);
-    }
+        }
     }//GEN-LAST:event_jBtnBuscarCuentaActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+         Reporte r = new Reporte();
+        List<Parametro> listaParametros = new ArrayList<>();
+        listaParametros.add(new Parametro("p_edad", Integer.parseInt(this.txtEdad.getText())));
+        try {
+            r.gReporte("reporte_persona_parametros.jasper", listaParametros);
+        } catch (SQLException | ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

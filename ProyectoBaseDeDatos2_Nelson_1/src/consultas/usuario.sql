@@ -1,4 +1,0 @@
-select COD_USUARIO, PASSWORD FROM USUARIO;
-
-
-
